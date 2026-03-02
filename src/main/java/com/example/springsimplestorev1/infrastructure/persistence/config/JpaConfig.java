@@ -6,7 +6,9 @@ import org.springframework.boot.jdbc.autoconfigure.DataSourceProperties;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -19,13 +21,14 @@ public class JpaConfig {
 
     @Bean
     @ConfigurationProperties("spring.datasource")
-    public DataSourceProperties dataSourceProperties() {
+    @Primary
+    public DataSourceProperties appDataSourceProperties() {
         return new DataSourceProperties();
     }
 
     @Bean
     @ConfigurationProperties("spring.datasource.hikari")
-    public DataSource dataSource(DataSourceProperties properties) {
+    public DataSource dataSource(@Qualifier("appDataSourceProperties") DataSourceProperties properties) {
         return properties
                 .initializeDataSourceBuilder()
                 .type(HikariDataSource.class)
