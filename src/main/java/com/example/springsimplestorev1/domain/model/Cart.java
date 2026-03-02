@@ -1,6 +1,5 @@
-package com.example.springsimplestorev1.domain;
+package com.example.springsimplestorev1.domain.model;
 
-import com.example.springsimplestorev1.domain.repository.CartRepository;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,9 +20,10 @@ public class Cart {
     private Long id;
 
     @OneToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
 
     public Cart(User user) {
@@ -39,7 +39,7 @@ public class Cart {
         if (existingItem.isPresent()) {
             existingItem.get().increaseQuantity(quantity);
         } else {
-            items.add(new CartItem(product, quantity));
+            items.add(new CartItem(this, product, quantity));
         }
     }
 

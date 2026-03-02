@@ -1,4 +1,4 @@
-package com.example.springsimplestorev1.domain;
+package com.example.springsimplestorev1.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,7 +15,12 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
     @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private int quantity;
@@ -29,6 +34,10 @@ public class OrderItem {
         this.product = product;
         this.quantity = quantity;
         this.priceAtPurchase = product.getPrice();
+    }
+
+    void attachToOrder(Order order) {
+        this.order = order;
     }
 
     public double getTotal() {

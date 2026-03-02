@@ -1,4 +1,4 @@
-package com.example.springsimplestorev1.domain;
+package com.example.springsimplestorev1.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

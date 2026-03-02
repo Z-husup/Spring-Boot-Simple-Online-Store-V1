@@ -1,4 +1,4 @@
-package com.example.springsimplestorev1.domain;
+package com.example.springsimplestorev1.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,16 +15,22 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "cart_id", nullable = false)
+    private Cart cart;
+
     @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
     private int quantity;
 
-    protected CartItem(Product product, int quantity) {
+    protected CartItem(Cart cart, Product product, int quantity) {
         if (quantity <= 0) {
             throw new IllegalArgumentException("Quantity must be positive");
         }
 
+        this.cart = cart;
         this.product = product;
         this.quantity = quantity;
     }

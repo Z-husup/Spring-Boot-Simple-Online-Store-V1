@@ -1,4 +1,4 @@
-package com.example.springsimplestorev1.domain;
+package com.example.springsimplestorev1.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -20,9 +20,10 @@ public class Order {
     private Long id;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items = new ArrayList<>();
 
     private LocalDateTime createdAt;
@@ -33,6 +34,7 @@ public class Order {
     }
 
     public void addItem(OrderItem item) {
+        item.attachToOrder(this);
         items.add(item);
     }
 
