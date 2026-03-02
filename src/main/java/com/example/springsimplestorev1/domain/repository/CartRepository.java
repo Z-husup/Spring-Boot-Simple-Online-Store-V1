@@ -1,11 +1,11 @@
 package com.example.springsimplestorev1.domain.repository;
 
-import com.example.springsimplestorev1.domain.Cart;
-import org.springframework.stereotype.Repository;
+import com.example.springsimplestorev1.domain.model.Cart;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-@Repository
-public interface CartRepository {
+public interface CartRepository extends JpaRepository<Cart, Long> {
 
+    Optional<Cart> findByUserId(Long userId);
 }
