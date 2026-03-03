@@ -1,5 +1,6 @@
 package com.example.springsimplestorev1.domain.model;
 
+import com.example.springsimplestorev1.domain.exception.ValidationException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,7 +29,7 @@ public class OrderItem {
 
     public OrderItem(Product product, int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
+            throw new ValidationException("Quantity must be positive");
         }
 
         this.product = product;

@@ -1,5 +1,7 @@
 package com.example.springsimplestorev1.domain.model;
 
+import com.example.springsimplestorev1.domain.exception.BusinessRuleException;
+import com.example.springsimplestorev1.domain.exception.ValidationException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -27,7 +29,7 @@ public class CartItem {
 
     protected CartItem(Cart cart, Product product, int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
+            throw new ValidationException("Quantity must be positive");
         }
 
         this.cart = cart;
@@ -37,17 +39,17 @@ public class CartItem {
 
     void increaseQuantity(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
+            throw new ValidationException("Amount must be positive");
         }
         this.quantity += amount;
     }
 
     void decreaseQuantity(int amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Amount must be positive");
+            throw new ValidationException("Amount must be positive");
         }
         if (this.quantity - amount <= 0) {
-            throw new IllegalStateException("Quantity cannot go below 1");
+            throw new BusinessRuleException("Quantity cannot go below 1");
         }
         this.quantity -= amount;
     }

@@ -16,7 +16,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @EntityScan(basePackages = "com.example.springsimplestorev1.domain.model")
-@EnableJpaRepositories(basePackages = "com.example.springsimplestorev1.domain.repository")
+@EnableJpaRepositories(basePackages = "com.example.springsimplestorev1.infrastructure.persistence.repository")
 public class JpaConfig {
 
     @Bean

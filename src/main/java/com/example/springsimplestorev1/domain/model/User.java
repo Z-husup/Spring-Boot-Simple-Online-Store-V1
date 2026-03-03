@@ -1,5 +1,6 @@
 package com.example.springsimplestorev1.domain.model;
 
+import com.example.springsimplestorev1.domain.exception.ValidationException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class User {
 
     public User(String email, String name) {
         if (email == null || email.isBlank()) {
-            throw new IllegalArgumentException("Email is required");
+            throw new ValidationException("Email is required");
         }
 
         this.email = email;
