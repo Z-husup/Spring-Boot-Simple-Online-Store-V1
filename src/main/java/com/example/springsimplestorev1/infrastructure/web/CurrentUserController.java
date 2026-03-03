@@ -4,13 +4,14 @@ import com.example.springsimplestorev1.application.usecase.cart.AddProductToCart
 import com.example.springsimplestorev1.application.usecase.cart.ClearCartUseCase;
 import com.example.springsimplestorev1.application.usecase.cart.GetOrCreateCartUseCase;
 import com.example.springsimplestorev1.application.usecase.cart.RemoveProductFromCartUseCase;
+import com.example.springsimplestorev1.application.usecase.payment.ConfirmCheckoutPaymentUseCase;
+import com.example.springsimplestorev1.application.usecase.payment.CreateCheckoutSessionUseCase;
 import com.example.springsimplestorev1.application.usecase.order.GetOrdersByUserIdUseCase;
 import com.example.springsimplestorev1.application.usecase.order.PlaceOrderUseCase;
 import com.example.springsimplestorev1.application.usecase.product.GetAllProductsUseCase;
 import com.example.springsimplestorev1.application.usecase.user.GetUserByEmailUseCase;
 import com.example.springsimplestorev1.application.usecase.user.UpdateUserNameUseCase;
 import com.example.springsimplestorev1.domain.model.Cart;
-import com.example.springsimplestorev1.domain.model.CartItem;
 import com.example.springsimplestorev1.domain.model.Order;
 import com.example.springsimplestorev1.domain.model.Product;
 import com.example.springsimplestorev1.domain.model.User;
@@ -26,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/me")
 @PreAuthorize("hasAnyRole('CLIENT','ADMIN')")
-public class MeController {
+public class CurrentUserController {
 
     private final GetUserByEmailUseCase getUserByEmailUseCase;
     private final GetAllProductsUseCase getAllProductsUseCase;
@@ -39,8 +40,10 @@ public class MeController {
     private final PlaceOrderUseCase placeOrderUseCase;
     private final GetOrdersByUserIdUseCase getOrdersByUserIdUseCase;
     private final UpdateUserNameUseCase updateUserNameUseCase;
+    private final CreateCheckoutSessionUseCase createCheckoutSessionUseCase;
+    private final ConfirmCheckoutPaymentUseCase confirmCheckoutPaymentUseCase;
 
-    public MeController(
+    public CurrentUserController(
             GetUserByEmailUseCase getUserByEmailUseCase,
             GetAllProductsUseCase getAllProductsUseCase,
             GetOrCreateCartUseCase getOrCreateCartUseCase,
@@ -51,7 +54,9 @@ public class MeController {
             OrderItemRepository orderItemRepository,
             PlaceOrderUseCase placeOrderUseCase,
             GetOrdersByUserIdUseCase getOrdersByUserIdUseCase,
-            UpdateUserNameUseCase updateUserNameUseCase
+            UpdateUserNameUseCase updateUserNameUseCase,
+            CreateCheckoutSessionUseCase createCheckoutSessionUseCase,
+            ConfirmCheckoutPaymentUseCase confirmCheckoutPaymentUseCase
     ) {
         this.getUserByEmailUseCase = getUserByEmailUseCase;
         this.getAllProductsUseCase = getAllProductsUseCase;
@@ -64,6 +69,8 @@ public class MeController {
         this.placeOrderUseCase = placeOrderUseCase;
         this.getOrdersByUserIdUseCase = getOrdersByUserIdUseCase;
         this.updateUserNameUseCase = updateUserNameUseCase;
+        this.createCheckoutSessionUseCase = createCheckoutSessionUseCase;
+        this.confirmCheckoutPaymentUseCase = confirmCheckoutPaymentUseCase;
     }
 
     @GetMapping("/profile")
@@ -119,6 +126,30 @@ public class MeController {
         return toOrderResponse(order);
     }
 
+    @PostMapping("/payments/checkout-session")
+    public CheckoutSessionResponse createCheckoutSession(
+            Authentication authentication,
+            @RequestBody CheckoutSessionRequest request
+    ) {
+        User user = currentUser(authentication);
+        CreateCheckoutSessionUseCase.CheckoutSessionResult session = createCheckoutSessionUseCase.execute(
+                user.getId(),
+                request.successUrl(),
+                request.cancelUrl()
+        );
+        return new CheckoutSessionResponse(session.sessionId(), session.checkoutUrl());
+    }
+
+    @PostMapping("/payments/confirm")
+    public OrderResponse confirmCheckoutPayment(
+            Authentication authentication,
+            @RequestBody ConfirmCheckoutPaymentRequest request
+    ) {
+        User user = currentUser(authentication);
+        Order order = confirmCheckoutPaymentUseCase.execute(user.getId(), request.sessionId());
+        return toOrderResponse(order);
+    }
+
     @GetMapping("/orders")
     public List<OrderResponse> orders(Authentication authentication) {
         User user = currentUser(authentication);
@@ -168,4 +199,10 @@ public class MeController {
     public record CartResponse(Long cartId, Long userId, List<CartItemResponse> items, double total) {}
 
     public record OrderResponse(Long orderId, LocalDateTime createdAt, double total) {}
+
+    public record CheckoutSessionRequest(String successUrl, String cancelUrl) {}
+
+    public record CheckoutSessionResponse(String sessionId, String checkoutUrl) {}
+
+    public record ConfirmCheckoutPaymentRequest(String sessionId) {}
 }

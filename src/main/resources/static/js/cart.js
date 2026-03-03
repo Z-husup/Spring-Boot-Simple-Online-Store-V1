@@ -4,6 +4,9 @@ const cartTotal = document.getElementById('cartTotal');
 const cartGrandTotal = document.getElementById('cartGrandTotal');
 const ordersList = document.getElementById('ordersList');
 const cartUserBadge = document.getElementById('cartUserBadge');
+const checkoutModalElement = document.getElementById('checkoutModal');
+const payNowBtn = document.getElementById('payNowBtn');
+const checkoutModal = new bootstrap.Modal(checkoutModalElement);
 
 function status(message, kind = 'secondary') {
   const bg = {
@@ -114,6 +117,59 @@ async function loadAll() {
   }
 }
 
+async function startCardPayment() {
+  try {
+    payNowBtn.disabled = true;
+    payNowBtn.textContent = 'Redirecting...';
+
+    const successUrl = `${window.location.origin}/client/cart?payment=success&session_id={CHECKOUT_SESSION_ID}`;
+    const cancelUrl = `${window.location.origin}/client/cart?payment=cancel`;
+
+    const session = await requestJson('/api/v1/me/payments/checkout-session', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ successUrl, cancelUrl })
+    });
+
+    window.location.href = session.checkoutUrl;
+  } catch (err) {
+    payNowBtn.disabled = false;
+    payNowBtn.textContent = 'Pay now';
+    status(err.message, 'danger');
+  }
+}
+
+async function handlePaymentReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const paymentState = params.get('payment');
+  const sessionId = params.get('session_id');
+
+  if (!paymentState) {
+    return;
+  }
+
+  if (paymentState === 'cancel') {
+    status('Payment was cancelled.', 'warning');
+    window.history.replaceState({}, document.title, '/client/cart');
+    return;
+  }
+
+  if (paymentState === 'success' && sessionId) {
+    try {
+      await requestJson('/api/v1/me/payments/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId })
+      });
+      status('Payment successful. Order placed.', 'success');
+    } catch (err) {
+      status(err.message, 'danger');
+    } finally {
+      window.history.replaceState({}, document.title, '/client/cart');
+    }
+  }
+}
+
 document.getElementById('clearCartBtn').addEventListener('click', async () => {
   try {
     const cart = await requestJson('/api/v1/me/cart', { method: 'DELETE' });
@@ -125,13 +181,9 @@ document.getElementById('clearCartBtn').addEventListener('click', async () => {
 });
 
 document.getElementById('checkoutBtn').addEventListener('click', async () => {
-  try {
-    await requestJson('/api/v1/me/orders', { method: 'POST' });
-    await loadAll();
-    status('Order placed successfully.', 'success');
-  } catch (err) {
-    status(err.message, 'danger');
-  }
+  checkoutModal.show();
 });
 
-loadAll();
+payNowBtn.addEventListener('click', startCardPayment);
+
+handlePaymentReturn().then(loadAll);

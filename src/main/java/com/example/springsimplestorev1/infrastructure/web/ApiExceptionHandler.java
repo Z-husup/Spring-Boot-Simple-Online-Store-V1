@@ -3,6 +3,7 @@ package com.example.springsimplestorev1.infrastructure.web;
 import com.example.springsimplestorev1.domain.exception.BusinessRuleException;
 import com.example.springsimplestorev1.domain.exception.DuplicateResourceException;
 import com.example.springsimplestorev1.domain.exception.DomainException;
+import com.example.springsimplestorev1.domain.exception.PaymentIntegrationException;
 import com.example.springsimplestorev1.domain.exception.ResourceNotFoundException;
 import com.example.springsimplestorev1.domain.exception.ValidationException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,6 +40,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorResponse> handleDomain(DomainException ex, HttpServletRequest request) {
         return build(HttpStatus.BAD_REQUEST, ex.getMessage(), request.getRequestURI());
+    }
+
+    @ExceptionHandler(PaymentIntegrationException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentProvider(PaymentIntegrationException ex, HttpServletRequest request) {
+        return build(HttpStatus.BAD_GATEWAY, ex.getMessage(), request.getRequestURI());
     }
 
     @ExceptionHandler(Exception.class)
