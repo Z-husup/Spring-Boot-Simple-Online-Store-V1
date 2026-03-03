@@ -36,4 +36,4 @@ Open `http://localhost:8080`.
 ![Orders](docs/screenshots/orders-page.png)
 ![Login](docs/screenshots/login-page.png)
 ![Registration](docs/screenshots/register-page.png)
-![Admin](docs/screenshots/admin-page.png)
+![Admin](docs/screenshots/admin-dashboard.png)
