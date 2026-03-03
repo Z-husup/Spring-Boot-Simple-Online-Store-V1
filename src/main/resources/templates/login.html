@@ -22,6 +22,10 @@
                         You have been logged out.
                     </div>
 
+                    <div class="alert alert-success" th:if="${param.registered}">
+                        Registration successful. Please sign in.
+                    </div>
+
                     <form method="post" action="/login" class="d-grid gap-3">
                         <div>
                             <label class="form-label">Username</label>
@@ -37,8 +41,7 @@
                     </form>
 
                     <hr>
-                    <p class="small text-secondary mb-1">Demo users:</p>
-                    <p class="small mb-0">admin / admin123, client / client123</p>
+                    <p class="mb-0 text-center">No account yet? <a href="/register">Create one</a></p>
                 </div>
             </div>
         </div>

@@ -1,0 +1,73 @@
+body {
+  background: #eaeded;
+}
+
+.orders-nav {
+  background: #131921;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+.navbar-brand span {
+  color: #f3a847;
+}
+
+.user-pill {
+  background: #232f3e;
+  border: 1px solid #394b61;
+  color: #fff;
+}
+
+.orders-header {
+  background: linear-gradient(180deg, #f8f9fb 0%, #f0f4f8 100%);
+}
+
+.status-pill {
+  background: #ffffff;
+  border: 1px solid #dce3ea;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.orders-panel,
+.summary-panel {
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}
+
+.order-card {
+  border: 1px solid #dbe3ec;
+  border-radius: 12px;
+  background: #fff;
+  padding: 14px;
+}
+
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.order-id {
+  font-weight: 700;
+  color: #111827;
+}
+
+.order-total {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.order-date {
+  font-size: 0.86rem;
+  color: #6b7280;
+}
+
+.empty-orders {
+  color: #6b7280;
+  text-align: center;
+  padding: 2rem 0;
+}

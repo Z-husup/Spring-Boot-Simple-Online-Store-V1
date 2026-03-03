@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -20,15 +21,26 @@ public class DatabaseInitializer {
     @Value("${security.users.client.username:client}")
     private String clientUsername;
 
+    @Value("${security.users.admin.password:admin123}")
+    private String adminPassword;
+
+    @Value("${security.users.client.password:client123}")
+    private String clientPassword;
+
     @Bean
-    public CommandLineRunner seedUsers(UserRepository userRepository) {
+    public CommandLineRunner seedUsers(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            if (!userRepository.existsByEmail(adminUsername)) {
-                userRepository.save(new User(adminUsername, "Administrator"));
-            }
-            if (!userRepository.existsByEmail(clientUsername)) {
-                userRepository.save(new User(clientUsername, "Client"));
-            }
+            userRepository.findByEmail(adminUsername)
+                    .ifPresentOrElse(
+                            user -> user.changePasswordHash(passwordEncoder.encode(adminPassword)),
+                            () -> userRepository.save(new User(adminUsername, "Administrator", passwordEncoder.encode(adminPassword)))
+                    );
+
+            userRepository.findByEmail(clientUsername)
+                    .ifPresentOrElse(
+                            user -> user.changePasswordHash(passwordEncoder.encode(clientPassword)),
+                            () -> userRepository.save(new User(clientUsername, "Client", passwordEncoder.encode(clientPassword)))
+                    );
         };
     }
 

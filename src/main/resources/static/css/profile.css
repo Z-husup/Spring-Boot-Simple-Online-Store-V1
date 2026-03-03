@@ -1,0 +1,38 @@
+body {
+  background: #eaeded;
+}
+
+.profile-nav {
+  background: #131921;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+.navbar-brand span {
+  color: #f3a847;
+}
+
+.user-pill {
+  background: #232f3e;
+  border: 1px solid #394b61;
+  color: #fff;
+}
+
+.profile-header {
+  background: linear-gradient(180deg, #f8f9fb 0%, #f0f4f8 100%);
+}
+
+.status-pill {
+  background: #ffffff;
+  border: 1px solid #dce3ea;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.profile-card,
+.info-card {
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}

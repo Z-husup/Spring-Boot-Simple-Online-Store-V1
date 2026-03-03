@@ -8,12 +8,14 @@ import com.example.springsimplestorev1.application.usecase.order.GetOrdersByUser
 import com.example.springsimplestorev1.application.usecase.order.PlaceOrderUseCase;
 import com.example.springsimplestorev1.application.usecase.product.GetAllProductsUseCase;
 import com.example.springsimplestorev1.application.usecase.user.GetUserByEmailUseCase;
+import com.example.springsimplestorev1.application.usecase.user.UpdateUserNameUseCase;
 import com.example.springsimplestorev1.domain.model.Cart;
 import com.example.springsimplestorev1.domain.model.CartItem;
 import com.example.springsimplestorev1.domain.model.Order;
 import com.example.springsimplestorev1.domain.model.Product;
 import com.example.springsimplestorev1.domain.model.User;
 import com.example.springsimplestorev1.domain.repository.CartItemRepository;
+import com.example.springsimplestorev1.domain.repository.OrderItemRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +35,10 @@ public class MeController {
     private final RemoveProductFromCartUseCase removeProductFromCartUseCase;
     private final ClearCartUseCase clearCartUseCase;
     private final CartItemRepository cartItemRepository;
+    private final OrderItemRepository orderItemRepository;
     private final PlaceOrderUseCase placeOrderUseCase;
     private final GetOrdersByUserIdUseCase getOrdersByUserIdUseCase;
+    private final UpdateUserNameUseCase updateUserNameUseCase;
 
     public MeController(
             GetUserByEmailUseCase getUserByEmailUseCase,
@@ -44,8 +48,10 @@ public class MeController {
             RemoveProductFromCartUseCase removeProductFromCartUseCase,
             ClearCartUseCase clearCartUseCase,
             CartItemRepository cartItemRepository,
+            OrderItemRepository orderItemRepository,
             PlaceOrderUseCase placeOrderUseCase,
-            GetOrdersByUserIdUseCase getOrdersByUserIdUseCase
+            GetOrdersByUserIdUseCase getOrdersByUserIdUseCase,
+            UpdateUserNameUseCase updateUserNameUseCase
     ) {
         this.getUserByEmailUseCase = getUserByEmailUseCase;
         this.getAllProductsUseCase = getAllProductsUseCase;
@@ -54,14 +60,23 @@ public class MeController {
         this.removeProductFromCartUseCase = removeProductFromCartUseCase;
         this.clearCartUseCase = clearCartUseCase;
         this.cartItemRepository = cartItemRepository;
+        this.orderItemRepository = orderItemRepository;
         this.placeOrderUseCase = placeOrderUseCase;
         this.getOrdersByUserIdUseCase = getOrdersByUserIdUseCase;
+        this.updateUserNameUseCase = updateUserNameUseCase;
     }
 
     @GetMapping("/profile")
     public ProfileResponse profile(Authentication authentication) {
         User user = currentUser(authentication);
         return new ProfileResponse(user.getId(), user.getEmail(), user.getName());
+    }
+
+    @PatchMapping("/profile")
+    public ProfileResponse updateProfile(Authentication authentication, @RequestBody UpdateProfileRequest request) {
+        User user = currentUser(authentication);
+        User updated = updateUserNameUseCase.execute(user.getId(), request.name());
+        return new ProfileResponse(updated.getId(), updated.getEmail(), updated.getName());
     }
 
     @GetMapping("/products")
@@ -134,10 +149,15 @@ public class MeController {
     }
 
     private OrderResponse toOrderResponse(Order order) {
-        return new OrderResponse(order.getId(), order.getCreatedAt(), order.getTotal());
+        double total = orderItemRepository.findByOrderId(order.getId()).stream()
+                .mapToDouble(item -> item.getPriceAtPurchase() * item.getQuantity())
+                .sum();
+        return new OrderResponse(order.getId(), order.getCreatedAt(), total);
     }
 
     public record ProfileResponse(Long id, String email, String name) {}
+
+    public record UpdateProfileRequest(String name) {}
 
     public record ProductResponse(Long id, String name, String description, String imageUrl, double price, int stock) {}
 

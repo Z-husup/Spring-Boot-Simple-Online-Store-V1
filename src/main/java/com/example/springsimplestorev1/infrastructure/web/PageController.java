@@ -30,4 +30,14 @@ public class PageController {
     public String clientCart() {
         return "cart";
     }
+
+    @GetMapping("/client/orders")
+    public String clientOrders() {
+        return "orders";
+    }
+
+    @GetMapping("/client/profile")
+    public String clientProfile() {
+        return "profile";
+    }
 }

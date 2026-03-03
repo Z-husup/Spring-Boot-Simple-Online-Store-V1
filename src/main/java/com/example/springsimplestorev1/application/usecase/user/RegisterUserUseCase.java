@@ -16,10 +16,10 @@ public class RegisterUserUseCase {
     }
 
     @Transactional
-    public User execute(String email, String name) {
+    public User execute(String email, String name, String passwordHash) {
         if (userRepository.existsByEmail(email)) {
             throw new DuplicateResourceException("A user with this email already exists");
         }
-        return userRepository.save(new User(email, name));
+        return userRepository.save(new User(email, name, passwordHash));
     }
 }

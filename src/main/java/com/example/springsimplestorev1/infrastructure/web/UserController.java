@@ -8,6 +8,7 @@ import com.example.springsimplestorev1.application.usecase.user.UpdateUserNameUs
 import com.example.springsimplestorev1.domain.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,24 +24,31 @@ public class UserController {
     private final GetUserByIdUseCase getUserByIdUseCase;
     private final GetUserByEmailUseCase getUserByEmailUseCase;
     private final GetAllUsersUseCase getAllUsersUseCase;
+    private final PasswordEncoder passwordEncoder;
 
     public UserController(
             RegisterUserUseCase registerUserUseCase,
             UpdateUserNameUseCase updateUserNameUseCase,
             GetUserByIdUseCase getUserByIdUseCase,
             GetUserByEmailUseCase getUserByEmailUseCase,
-            GetAllUsersUseCase getAllUsersUseCase
+            GetAllUsersUseCase getAllUsersUseCase,
+            PasswordEncoder passwordEncoder
     ) {
         this.registerUserUseCase = registerUserUseCase;
         this.updateUserNameUseCase = updateUserNameUseCase;
         this.getUserByIdUseCase = getUserByIdUseCase;
         this.getUserByEmailUseCase = getUserByEmailUseCase;
         this.getAllUsersUseCase = getAllUsersUseCase;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> register(@RequestBody RegisterUserRequest request) {
-        User user = registerUserUseCase.execute(request.email(), request.name());
+        User user = registerUserUseCase.execute(
+                request.email(),
+                request.name(),
+                passwordEncoder.encode(request.password())
+        );
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(user));
     }
 
@@ -68,7 +76,7 @@ public class UserController {
         return new UserResponse(user.getId(), user.getEmail(), user.getName());
     }
 
-    public record RegisterUserRequest(String email, String name) {
+    public record RegisterUserRequest(String email, String name, String password) {
     }
 
     public record UpdateUserNameRequest(String name) {
