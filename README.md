@@ -30,11 +30,10 @@ Open `http://localhost:8080`.
 
 ## Screenshots
 
-![Login](docs/screenshots/login-page.png)
-![Registration](docs/screenshots/register-page.png)
 ![Store](docs/screenshots/store-page.png)
 ![Cart](docs/screenshots/cart-page.png)
 ![Payment](docs/screenshots/payment-modal.png)
 ![Orders](docs/screenshots/orders-page.png)
-![Profile](docs/screenshots/profile-page.png)
+![Login](docs/screenshots/login-page.png)
+![Registration](docs/screenshots/register-page.png)
 ![Admin](docs/screenshots/admin-dashboard.png)
