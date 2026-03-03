@@ -1,0 +1,108 @@
+body {
+  background: #eaeded;
+}
+
+.store-nav {
+  background: #131921;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  letter-spacing: 0.2px;
+}
+
+.navbar-brand span {
+  color: #f3a847;
+}
+
+.nav-search {
+  width: min(52vw, 720px);
+}
+
+.user-pill {
+  background: #232f3e;
+  color: #fff;
+  border: 1px solid #394b61;
+}
+
+.hero-strip {
+  background: linear-gradient(180deg, #f7f8fa 0%, #eff3f6 100%);
+  border-bottom: 1px solid #d9e0e7;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #d9e0e7;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 100%;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(19, 25, 33, 0.08);
+}
+
+.product-image-wrap {
+  background: #fff;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+.product-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.product-body {
+  padding: 14px;
+}
+
+.product-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  color: #0f1111;
+  margin-bottom: 6px;
+  min-height: 48px;
+}
+
+.product-price {
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.product-price small {
+  font-size: 0.9rem;
+  vertical-align: top;
+}
+
+.rating-stars {
+  color: #f3a847;
+  letter-spacing: 1px;
+  font-size: 0.9rem;
+}
+
+.stock-chip {
+  background: #ecfdf3;
+  color: #177245;
+  border: 1px solid #b6ebcc;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  padding: 3px 8px;
+}
+
+.qty-input {
+  max-width: 84px;
+}
+
+.add-btn {
+  font-weight: 600;
+}

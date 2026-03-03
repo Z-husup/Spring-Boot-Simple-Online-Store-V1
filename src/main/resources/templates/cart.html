@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/cart.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg cart-nav border-bottom">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand fw-bold text-white" href="/client/store">Online Store</a>
+        <div class="d-flex align-items-center gap-2">
+            <span id="cartUserBadge" class="badge user-pill">Loading...</span>
+            <a class="btn btn-outline-light btn-sm" href="/client/store">Continue shopping</a>
+            <a class="btn btn-outline-warning btn-sm" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<header class="cart-header py-3 px-4 border-bottom">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <h1 class="h5 mb-0">Shopping Cart</h1>
+        <div id="cartStatus" class="small status-pill">Loading cart...</div>
+    </div>
+</header>
+
+<main class="container-fluid px-4 py-4">
+    <div class="row g-4">
+        <div class="col-12 col-xl-8">
+            <div class="card cart-panel border-0">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h2 class="h6 mb-0">Items in your cart</h2>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-end">Price</th>
+                                <th class="text-end">Qty</th>
+                                <th class="text-end">Subtotal</th>
+                                <th class="text-end"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="cartItemsBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card orders-panel border-0 mt-4">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h2 class="h6 mb-0">Recent Orders</h2>
+                </div>
+                <div class="card-body pt-2">
+                    <ul id="ordersList" class="list-group list-group-flush"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <aside class="card summary-panel border-0 sticky-xl-top" style="top: 1rem;">
+                <div class="card-body">
+                    <h2 class="h6 mb-3">Order Summary</h2>
+                    <div class="d-flex justify-content-between mb-2 text-secondary">
+                        <span>Items total</span>
+                        <span id="cartTotal">$0.00</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3 text-secondary">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-semibold fs-5 mb-3">
+                        <span>Total</span>
+                        <span id="cartGrandTotal">$0.00</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button id="checkoutBtn" class="btn btn-warning fw-semibold">Proceed to Checkout</button>
+                        <button id="clearCartBtn" class="btn btn-outline-danger">Clear Cart</button>
+                    </div>
+                    <p class="small text-secondary mt-3 mb-0">Secure checkout. Taxes included in product price for demo.</p>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>
+
+<script src="/js/cart.js"></script>
+</body>
+</html>

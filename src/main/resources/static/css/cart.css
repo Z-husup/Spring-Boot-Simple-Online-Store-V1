@@ -1,0 +1,74 @@
+body {
+  background: #eaeded;
+}
+
+.cart-nav {
+  background: #131921;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+}
+
+.navbar-brand span {
+  color: #f3a847;
+}
+
+.user-pill {
+  background: #232f3e;
+  border: 1px solid #394b61;
+  color: #fff;
+}
+
+.cart-header {
+  background: linear-gradient(180deg, #f8f9fb 0%, #f0f4f8 100%);
+}
+
+.status-pill {
+  background: #ffffff;
+  border: 1px solid #dce3ea;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.cart-panel,
+.orders-panel,
+.summary-panel {
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(17, 24, 39, 0.06);
+}
+
+.table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #64748b;
+}
+
+.item-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.item-meta {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.price-main,
+.subtotal-main {
+  font-weight: 600;
+  color: #111827;
+}
+
+.empty-cart {
+  padding: 2rem 0;
+  text-align: center;
+  color: #64748b;
+}
+
+.order-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
